@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 function App() {
+  const [btnLoading, setBtnLoading] = useState(false)
   const [input, setInput] = useState('')
   const [tasks, setTasks] = useState(
     [
@@ -28,8 +29,7 @@ function App() {
     //evitar que el formulario actualice la pag.
     event.preventDefault();
     // event.target.input[1].value = 'ayynnn'
-    // console.log(event.target);
-
+    
     // crearemos un id random con una libreria nativa del navegador
     const newIds = {
       id: crypto.randomUUID(),
@@ -43,9 +43,18 @@ function App() {
 
     //borramos el valor que se queda en el value del input (2do paso en la linea 60)
     setInput('')
-
   }
 
+  //vamos a quitar de la lista de tareas lo que este seleccionado con un filter.
+  const handleRemoveClick = (id) => {
+      //tomaremos el id unico "key" de la lista.
+    console.log('Eliminando',id);
+    const newTasks = tasks.filter(task => task.id != id)
+    console.log(newTasks)
+
+    //con esto guardamos la variable tasks
+    setTasks(newTasks)
+  }
   return (
     <>
       <main>
@@ -73,7 +82,9 @@ function App() {
                   
                   <input type="checkbox" /> {task.title}
 
-                  <button type="button">❌</button>
+                  <span style={{color: 'red', textDecoration:task.completed ? 'line-trougth' : 'none'}}> {task.title}{task.completed ? '1' : '0'} </span>
+
+                  <button type="button" onClick={()=>handleRemoveClick(task.id)}>❌</button>
                 </li>
               )
 
